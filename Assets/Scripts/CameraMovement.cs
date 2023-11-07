@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] float heigth = 10f;
+    [SerializeField] float maxDistance = 30f;
+    [SerializeField] float minDistance = 5f;
 
     Transform followTransform;
 
@@ -16,6 +17,17 @@ public class CameraMovement : MonoBehaviour
 
     void Update()
     {
+        Camera.main.transform.position += Camera.main.transform.forward * Input.mouseScrollDelta.y;
+
+        if ((Camera.main.transform.position - transform.position).magnitude < minDistance)
+        {
+            Camera.main.transform.position += Camera.main.transform.forward * -1f;
+        }
+        else if ((Camera.main.transform.position - transform.position).magnitude > maxDistance)
+        {
+            Camera.main.transform.position += Camera.main.transform.forward;
+        }
+
         if (followTransform != null)
         {
             transform.position = followTransform.position;

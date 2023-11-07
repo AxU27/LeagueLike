@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,7 +9,15 @@ public class Player : MonoBehaviour
     // Automatically assigned
     NavMeshAgent agent;
 
+    State playerState = State.Idle;
+
+    [Header("Assignables")]
     [SerializeField] LayerMask walkLayers;
+
+    [Header("Stats")]
+    public float damage = 50f;
+    public float attackRange = 3f;
+    public float movementSpeed = 4f;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +29,15 @@ public class Player : MonoBehaviour
     void Update()
     {
         GetInput();
+
+        if (agent.remainingDistance == 0f)
+        {
+            playerState = State.Idle;
+        }
+        else
+        {
+            playerState = State.Moving;
+        }
     }
 
     void GetInput()
@@ -37,8 +55,16 @@ public class Player : MonoBehaviour
         }
     }
 
+
     void GetReferences()
     {
         agent = GetComponent<NavMeshAgent>();
     }
+}
+
+public enum State
+{
+    Idle,
+    Moving,
+    Attacking
 }
