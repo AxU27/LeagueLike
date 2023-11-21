@@ -8,8 +8,11 @@ public class Player : MonoBehaviour
 {
     // Automatically assigned
     NavMeshAgent agent;
+    Animator animator;
 
     State playerState = State.Idle;
+    Vector2 velocity;
+    Vector2 smoothDeltaPos;
 
     [Header("Assignables")]
     [SerializeField] LayerMask walkLayers;
@@ -23,12 +26,17 @@ public class Player : MonoBehaviour
     void Start()
     {
         GetReferences();
+        animator.applyRootMotion = true;
+
+        agent.updatePosition = false;
+        agent.updateRotation = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         GetInput();
+        SyncAnimatorAndAgent();
 
         if (agent.remainingDistance == 0f)
         {
@@ -38,6 +46,14 @@ public class Player : MonoBehaviour
         {
             playerState = State.Moving;
         }
+    }
+
+    private void OnAnimatorMove()
+    {
+        Vector3 rootPos = animator.rootPosition;
+        rootPos.y = agent.nextPosition.y;
+        transform.position = rootPos;
+        agent.nextPosition = rootPos;
     }
 
     void GetInput()
@@ -55,10 +71,33 @@ public class Player : MonoBehaviour
         }
     }
 
+    void SyncAnimatorAndAgent()
+    {
+        Vector3 worldDeltaPos = agent.nextPosition - transform.position;
+        worldDeltaPos.y = 0f;
+
+        float dx = Vector3.Dot(transform.right, worldDeltaPos);
+        float dy = Vector3.Dot(transform.forward, worldDeltaPos);
+        Vector2 deltaPos = new Vector2(dx, dy);
+
+        float smooth = Mathf.Min(1, Time.deltaTime / 0.1f);
+        smoothDeltaPos = Vector2.Lerp(smoothDeltaPos, deltaPos, smooth);
+
+        velocity = smoothDeltaPos / Time.deltaTime;
+        if (agent.remainingDistance <= agent.stoppingDistance)
+        {
+
+        }
+
+        animator.SetBool("move", agent.velocity.magnitude > 0.5f);
+        animator.SetFloat("locomotion", agent.velocity.magnitude);
+    }
+
 
     void GetReferences()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
     }
 }
 
