@@ -13,6 +13,11 @@ public class Player : MonoBehaviour
     State playerState = State.Idle;
     Vector2 velocity;
     Vector2 smoothDeltaPos;
+    Enemy targetEnemy;
+    float attackCd;
+    float ability1Cd, ability2Cd, ability3Cd, ability4Cd;
+    float timer;
+    bool canAct = true;
 
     [Header("Assignables")]
     [SerializeField] LayerMask walkLayers;
@@ -22,6 +27,7 @@ public class Player : MonoBehaviour
     public float damage = 50f;
     public float attackRange = 3f;
     public float movementSpeed = 4f;
+    public float attackSpeed = 1f;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +45,14 @@ public class Player : MonoBehaviour
         GetInput();
         SyncAnimatorAndAgent();
 
+        if (attackCd > 0f)
+            attackCd -= Time.deltaTime;
+
+
+        if (targetEnemy != null)
+        {
+            Attacking();
+        }
         if (agent.remainingDistance == 0f)
         {
             playerState = State.Idle;
@@ -47,6 +61,72 @@ public class Player : MonoBehaviour
         {
             playerState = State.Moving;
         }
+    }
+
+    void Attacking()
+    {
+        if (attackRange < (targetEnemy.transform.position - transform.position).magnitude)
+        {
+            timer -= Time.deltaTime;
+            if (timer <= 0f)
+            {
+                agent.SetDestination(targetEnemy.transform.position);
+                timer = 0.5f;
+            }
+        }
+        else
+        {
+            if (agent.hasPath) { agent.ResetPath(); }
+
+            if (attackCd <= 0f)
+            {
+                animator.SetTrigger("attack");
+                attackCd = 1f / attackSpeed;
+            }
+
+            Quaternion targetRot = Quaternion.LookRotation(targetEnemy.transform.position - transform.position, Vector3.up);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, 10 * Time.deltaTime);
+        }
+    }
+
+    public void Attack()
+    {
+        if (targetEnemy != null)
+        {
+            targetEnemy.TakeDamage(damage);
+        }
+    }
+
+    void Ability1Used(float freezeTime)
+    {
+        if (ability1Cd > 0f)
+            return;
+
+        agent.SetDestination(transform.position + transform.forward * 4f);
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+        animator.SetTrigger("ability1");
+        Freeze(freezeTime);
+    }
+
+    public void Ability1()
+    {
+        
+    }
+
+    void Freeze(float freezeTime)
+    {
+        Invoke("FreezeEnd", freezeTime);
+        canAct = false;
+        agent.updateRotation = false;
+        targetEnemy = null;
+    }
+
+    void FreezeEnd()
+    {
+        canAct = true;
+        agent.updateRotation = true;
+        agent.ResetPath();
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
     }
 
     private void OnAnimatorMove()
@@ -59,6 +139,9 @@ public class Player : MonoBehaviour
 
     void GetInput()
     {
+        if (!canAct)
+            return;
+
         if (Input.GetMouseButton(1))
         {
             Vector3 mousePos = Input.mousePosition;
@@ -67,8 +150,23 @@ public class Player : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.transform.position, raycastDir, out hit, 300f, walkLayers))
             {
-                agent.SetDestination(hit.point);
+                timer = 0f;
+                if (hit.transform.tag == "Enemy")
+                {
+                    targetEnemy = hit.transform.GetComponent<Enemy>();
+                    Debug.Log("Hit enemy");
+                }
+                else
+                {
+                    targetEnemy = null;
+                    agent.SetDestination(hit.point);
+                }
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Ability1Used(0.9f);
         }
     }
 
