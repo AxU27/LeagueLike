@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
 
     [Header("Assignables")]
     [SerializeField] LayerMask walkLayers;
+    [SerializeField] Transform modelTransform;
 
     [Header("Stats")]
     public float damage = 50f;
@@ -86,18 +87,27 @@ public class Player : MonoBehaviour
         velocity = smoothDeltaPos / Time.deltaTime;
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
-
+            velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
         }
 
-        animator.SetBool("move", agent.velocity.magnitude > 0.5f);
-        animator.SetFloat("locomotion", agent.velocity.magnitude);
+        bool shouldMove = velocity.magnitude > 0.5f && agent.remainingDistance > agent.stoppingDistance;
+
+        animator.SetBool("move", shouldMove);
+        animator.SetFloat("locomotion", velocity.magnitude);
+
+        float deltaMagnitude = worldDeltaPos.magnitude;
+        if (deltaMagnitude > agent.radius / 2)
+        {
+            transform.position = Vector3.Lerp(animator.rootPosition, agent.nextPosition, smooth);
+            modelTransform.position = transform.position;
+        }
     }
 
 
     void GetReferences()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
     }
 }
 

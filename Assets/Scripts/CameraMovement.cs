@@ -6,6 +6,7 @@ public class CameraMovement : MonoBehaviour
 {
     [SerializeField] float maxDistance = 30f;
     [SerializeField] float minDistance = 5f;
+    [SerializeField] float cameraSmooth = 0.1f;
 
     Transform followTransform;
 
@@ -30,7 +31,7 @@ public class CameraMovement : MonoBehaviour
 
         if (followTransform != null)
         {
-            transform.position = followTransform.position;
+            transform.position = Vector3.Lerp(transform.position, followTransform.position, cameraSmooth);
         }
     }
 }
