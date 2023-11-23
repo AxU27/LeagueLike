@@ -8,15 +8,11 @@ public class Hud : MonoBehaviour
 {
     public static Hud i;
 
-    [SerializeField] Slider ability1Slider;
-    [SerializeField] Slider ability2Slider;
-    [SerializeField] Slider ability3Slider;
-    [SerializeField] Slider ability4Slider;
+    [SerializeField] Slider[] abilitySliders;
+    [SerializeField] TextMeshProUGUI[] abilityCds;
 
-    [SerializeField] TextMeshProUGUI ability1Cd;
-    [SerializeField] TextMeshProUGUI ability2Cd;
-    [SerializeField] TextMeshProUGUI ability3Cd;
-    [SerializeField] TextMeshProUGUI ability4Cd;
+    float[] cooldowns;
+    float[] cooldownsRemaining;
 
     private void Awake()
     {
@@ -28,11 +24,48 @@ public class Hud : MonoBehaviour
         {
             i = this;
         }
+
+        cooldowns = new float[abilitySliders.Length];
+        cooldownsRemaining = new float[abilitySliders.Length];
+
+        for (int i = 0; i < abilityCds.Length; i++)
+        {
+            if (abilityCds[i] != null)
+            {
+                abilityCds[i].enabled = false;
+            }
+        }
     }
 
 
-    public void SetCooldown(int abilityNumber, float cd, float cdLeft)
+    private void Update()
     {
+        for (int i = 0; i < cooldowns.Length; i++)
+        {
+            if (cooldownsRemaining[i] > 0f)
+            {
+                UpdateCooldown(i);
+            }
+        }
+    }
 
+
+    public void SetCooldown(int abilityNumber, float cd)
+    {
+        cooldowns[abilityNumber] = cd;
+        cooldownsRemaining[abilityNumber] = cd;
+        abilityCds[abilityNumber].enabled = true;
+    }
+
+    void UpdateCooldown(int abilityNumber)
+    {
+        cooldownsRemaining[abilityNumber] -= Time.deltaTime;
+        abilitySliders[abilityNumber].value = cooldownsRemaining[abilityNumber] / cooldowns[abilityNumber];
+        abilityCds[abilityNumber].text = Mathf.RoundToInt(cooldownsRemaining[abilityNumber]) + "s";
+
+        if (cooldownsRemaining[abilityNumber] <= 0f)
+        {
+            abilityCds[abilityNumber].enabled = false;
+        }
     }
 }

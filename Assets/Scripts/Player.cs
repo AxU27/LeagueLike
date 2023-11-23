@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     Vector2 smoothDeltaPos;
     Enemy targetEnemy;
     float attackCd;
-    float ability1Cd, ability2Cd, ability3Cd, ability4Cd;
+    float ability1CdRemaining;
     float timer;
     bool canAct = true;
 
@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     public float attackRange = 3f;
     public float movementSpeed = 4f;
     public float attackSpeed = 1f;
+    [SerializeField] float ability1Cd, ability2Cd, ability3Cd, ability4Cd;
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +48,9 @@ public class Player : MonoBehaviour
 
         if (attackCd > 0f)
             attackCd -= Time.deltaTime;
+
+        if (ability1CdRemaining > 0f)
+            ability1CdRemaining -= Time.deltaTime;
 
 
         if (targetEnemy != null)
@@ -99,12 +103,14 @@ public class Player : MonoBehaviour
 
     void Ability1Used(float freezeTime)
     {
-        if (ability1Cd > 0f)
+        if (ability1CdRemaining > 0f)
             return;
 
         agent.SetDestination(transform.position + transform.forward * 4f);
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         animator.SetTrigger("ability1");
+        Hud.i.SetCooldown(1, ability1Cd);
+        ability1CdRemaining = ability1Cd;
         Freeze(freezeTime);
     }
 
