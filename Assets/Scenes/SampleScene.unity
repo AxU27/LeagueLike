@@ -6220,7 +6220,7 @@ GameObject:
   - component: {fileID: 8596012688740828847}
   - component: {fileID: 8596012688740828848}
   m_Layer: 0
-  m_Name: Room
+  m_Name: StartingRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9743,6 +9743,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseRoom: {fileID: 8833126962217229514, guid: af67ced0438014544a39516935decdf3,
     type: 3}
+  roomAmount: 20
+  normalRooms:
+  - {fileID: 1614345541828449323, guid: bd987046a7dfde94b98a568afeda33d5, type: 3}
 --- !u!114 &8596012688740828848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9755,6 +9758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c03aae9027a8d0043a7337bcf0a5ae76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
 --- !u!1 &8706661503580138132
 GameObject:
   m_ObjectHideFlags: 0

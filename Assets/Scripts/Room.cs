@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class Room : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public RoomType type;
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public enum RoomType
+{
+    Normal,
+    Spawn,
+    Boss,
+    Shop,
+    Workshop
 }

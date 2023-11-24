@@ -160,7 +160,6 @@ public class Player : MonoBehaviour
                 if (hit.transform.tag == "Enemy")
                 {
                     targetEnemy = hit.transform.GetComponent<Enemy>();
-                    Debug.Log("Hit enemy");
                 }
                 else
                 {
