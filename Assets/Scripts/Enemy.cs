@@ -8,20 +8,23 @@ public class Enemy : MonoBehaviour
 {
     [Header("Assignables")]
     [SerializeField] Slider hpSlider;
-    [SerializeField] Animator animator;
-    [SerializeField] NavMeshAgent agent;
+    public Animator animator;
+    public NavMeshAgent agent;
     [SerializeField] Transform modelTransform;
+
+    [Header("Stats")]
     [SerializeField] float maxHp = 100f;
-    [SerializeField] float attackRange = 2f;
-    [SerializeField] float damage = 20f;
-    [SerializeField] float attackSpeed = 0.5f;
+    public float attackRange = 2f;
+    public float damage = 20f;
+    public float attackSpeed = 0.5f;
 
     Vector2 velocity;
     Vector2 smoothDeltaPos;
     Player player;
     float hp;
     float timer;
-    float attackCd;
+    [HideInInspector]
+    public float attackCd;
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +45,7 @@ public class Enemy : MonoBehaviour
 
         if (player != null)
         {
-            Attacking();
+            FollowAndAttack();
         }
 
         if (attackCd > 0f)
@@ -65,7 +68,7 @@ public class Enemy : MonoBehaviour
         hpSlider.value = hp / maxHp;
     }
 
-    void Attacking()
+    void FollowAndAttack()
     {
         if (attackRange < (player.transform.position - transform.position).magnitude)
         {
@@ -88,6 +91,14 @@ public class Enemy : MonoBehaviour
 
             Quaternion targetRot = Quaternion.LookRotation(player.transform.position - transform.position, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, 10 * Time.deltaTime);
+        }
+    }
+
+    public virtual void Attack()
+    {
+        if (player != null)
+        {
+            player.TakeDamage((int)damage);
         }
     }
 

@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     // Automatically assigned
     NavMeshAgent agent;
     Animator animator;
+    Hud hud;
 
     State playerState = State.Idle;
     Vector2 velocity;
@@ -18,12 +19,14 @@ public class Player : MonoBehaviour
     float ability1CdRemaining;
     float timer;
     bool canAct = true;
+    int hp;
 
     [Header("Assignables")]
     [SerializeField] LayerMask walkLayers;
     [SerializeField] Transform modelTransform;
 
     [Header("Stats")]
+    public int maxHp = 500;
     public float damage = 50f;
     public float attackRange = 3f;
     public float movementSpeed = 4f;
@@ -38,6 +41,9 @@ public class Player : MonoBehaviour
 
         agent.updatePosition = false;
         agent.updateRotation = true;
+
+        hp = maxHp;
+        hud.UpdateHealthBar(maxHp, hp);
     }
 
     // Update is called once per frame
@@ -109,7 +115,7 @@ public class Player : MonoBehaviour
         agent.SetDestination(transform.position + transform.forward * 4f);
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         animator.SetTrigger("ability1");
-        Hud.i.SetCooldown(1, ability1Cd);
+        hud.SetCooldown(1, ability1Cd);
         ability1CdRemaining = ability1Cd;
         Freeze(freezeTime);
     }
@@ -117,6 +123,27 @@ public class Player : MonoBehaviour
     public void Ability1()
     {
         
+    }
+
+    void ModifyHealth(int amount)
+    {
+        hp += amount;
+
+        hud.UpdateHealthBar(maxHp, hp);
+
+        //Check if dead
+    }
+
+    public void TakeDamage(int amount)
+    {
+        //OnDamageTaken
+        ModifyHealth(-amount);
+    }
+
+    public void Heal(int amount)
+    {
+        //OnHealed
+        ModifyHealth(amount);
     }
 
     void Freeze(float freezeTime)
@@ -211,6 +238,7 @@ public class Player : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
+        hud = Hud.i;
     }
 }
 

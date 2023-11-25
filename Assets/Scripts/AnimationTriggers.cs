@@ -5,6 +5,8 @@ using UnityEngine;
 public class AnimationTriggers : MonoBehaviour
 {
     [SerializeField] Player player;
+    [SerializeField] Enemy enemy;
+
     void Start()
     {
         
@@ -21,6 +23,11 @@ public class AnimationTriggers : MonoBehaviour
         if (player != null)
         {
             player.Attack();
+        }
+
+        if (enemy != null)
+        {
+            enemy.Attack();
         }
     }
 

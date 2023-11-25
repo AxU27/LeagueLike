@@ -8,6 +8,8 @@ public class Hud : MonoBehaviour
 {
     public static Hud i;
 
+    [SerializeField] Slider hpSlider;
+    [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] Slider[] abilitySliders;
     [SerializeField] TextMeshProUGUI[] abilityCds;
 
@@ -67,5 +69,11 @@ public class Hud : MonoBehaviour
         {
             abilityCds[abilityNumber].enabled = false;
         }
+    }
+
+    public void UpdateHealthBar(int maxHp, int currentHp)
+    {
+        hpSlider.value = (float)currentHp / maxHp;
+        hpText.text = currentHp + "/" + maxHp;
     }
 }
