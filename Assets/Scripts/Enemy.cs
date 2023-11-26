@@ -26,6 +26,9 @@ public class Enemy : MonoBehaviour
     [HideInInspector]
     public float attackCd;
 
+    public delegate void OnEnemyDeath();
+    public static OnEnemyDeath onEnemyDeath;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +62,7 @@ public class Enemy : MonoBehaviour
 
         if (hp <= 0f)
         {
+            onEnemyDeath?.Invoke();
             Destroy(gameObject);
         }
     }
@@ -126,7 +130,7 @@ public class Enemy : MonoBehaviour
         animator.SetFloat("locomotion", velocity.magnitude);
 
         float deltaMagnitude = worldDeltaPos.magnitude;
-        if (deltaMagnitude > agent.radius / 2)
+        if (deltaMagnitude > agent.radius / 4)
         {
             transform.position = Vector3.Lerp(animator.rootPosition, agent.nextPosition, smooth);
             modelTransform.position = transform.position;
