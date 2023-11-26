@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] GameObject[] enemiesToSpawn;
-    [SerializeField] Vector2[] spawnPositions;
+    [SerializeField] EnemySpawn[] enemiesToSpawn;
 
-    public void SpawnEnemy()
+
+    public void SpawnEnemies()
     {
         for (int i = 0; i < enemiesToSpawn.Length; i++)
         {
-            Vector3 spawnPoint = new Vector3(transform.position.x + spawnPositions[i].x, transform.position.y, transform.position.z + spawnPositions[i].y);
-            GameObject go = Instantiate(enemiesToSpawn[i], spawnPoint, Quaternion.identity);
+            Vector3 spawnPoint = new Vector3(transform.position.x + enemiesToSpawn[i].position.x, transform.position.y, transform.position.z + enemiesToSpawn[i].position.y);
+            GameObject go = Instantiate(enemiesToSpawn[i].enemy, spawnPoint, Quaternion.identity);
         }
     }
+}
+
+[System.Serializable]
+class EnemySpawn
+{
+    public GameObject enemy;
+    public Vector2 position;
 }

@@ -22,7 +22,7 @@ public class LevelGenerator : MonoBehaviour
         for (int i = 1; i < rooms.Length; i++)
         {
             if (rooms[i].type == RoomType.Normal)
-                Instantiate(normalRooms[0], rooms[i].transform);
+                Instantiate(normalRooms[Random.Range(0, normalRooms.Length)], rooms[i].transform);
         }
 
         gameObject.GetComponent<NavMeshSurface>().BuildNavMesh();
