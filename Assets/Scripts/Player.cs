@@ -23,7 +23,8 @@ public class Player : MonoBehaviour
     int hp;
 
     float asMultiplier = 1f;
-    float damageMultiplier = 1f;
+    int damageIncrease;
+    int defenseIncrease;
 
     [Header("Assignables")]
     [SerializeField] LayerMask clickabeLayers;
@@ -37,7 +38,11 @@ public class Player : MonoBehaviour
     public float attackRange = 3f;
     public float movementSpeed = 4f;
     public float attackSpeed = 1f;
+    public int defence = 10;
     [SerializeField] float ability1Cd, ability2Cd, ability3Cd, ability4Cd;
+
+    public delegate void OnHit(Enemy enemy);
+    public static OnHit onHit;
 
     // Start is called before the first frame update
     void Start()
@@ -116,7 +121,8 @@ public class Player : MonoBehaviour
     {
         if (targetEnemy != null)
         {
-            targetEnemy.TakeDamage(damage);
+            targetEnemy.TakeDamage(damage + damageIncrease);
+            onHit?.Invoke(targetEnemy);
         }
     }
 
@@ -270,10 +276,21 @@ public class Player : MonoBehaviour
 
     public void UpdateStats()
     {
-        asMultiplier = 15.2f;
+        asMultiplier = 1f;
+        damageIncrease = 0;
+        defenseIncrease = 0;
+        GameManager.i.GetItemStats(this);
+
         animator.SetFloat("asMultiplier", asMultiplier);
 
-        hud.UpdateHudStats((int)(damage * damageMultiplier), attackSpeed * asMultiplier);
+        hud.UpdateHudStats((int)(damage + damageIncrease), attackSpeed * asMultiplier);
+    }
+
+    public void AddStats(float asMult, int damageInc, int defenceInc)
+    {
+        asMultiplier += asMult;
+        damageIncrease += damageInc;
+        defenseIncrease += defenceInc;
     }
 }
 

@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] Transform modelTransform;
 
     [Header("Stats")]
-    [SerializeField] float maxHp = 100f;
+    public float maxHp = 100f;
     public float attackRange = 2f;
     public float damage = 20f;
     public float attackSpeed = 0.5f;
@@ -21,7 +21,8 @@ public class Enemy : MonoBehaviour
     Vector2 velocity;
     Vector2 smoothDeltaPos;
     Player player;
-    float hp;
+    [HideInInspector]
+    public float hp;
     float timer;
     [HideInInspector]
     public float attackCd;

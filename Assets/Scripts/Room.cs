@@ -13,22 +13,30 @@ public class Room : MonoBehaviour
     [SerializeField] GameObject doors;
 
     EnemySpawner enemySpawner;
+    GameManager gameManager;
 
     private void Start()
     {
         enemySpawner = GetComponentInChildren<EnemySpawner>();
+        gameManager = GameManager.i;
     }
 
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!cleared && other.gameObject.tag == "Player" && !active)
+        if (!cleared && other.gameObject.tag == "Player" && !active && !gameManager.roomActive)
         {
             if (enemySpawner != null)
             {
                 enemyCount = enemySpawner.SpawnEnemies();
                 active = true;
+                gameManager.roomActive = true;
                 doors.SetActive(true);
+            }
+            else
+            {
+                cleared = true;
+                // Minimap show cleared
             }
         }
     }
@@ -44,7 +52,9 @@ public class Room : MonoBehaviour
                 if (enemyCount <= 0)
                 {
                     active = false;
+                    gameManager.roomActive = false;
                     doors.SetActive(false);
+                    cleared = true;
                 }
             }
         }
