@@ -12,6 +12,8 @@ public class Hud : MonoBehaviour
     [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] Slider[] abilitySliders;
     [SerializeField] TextMeshProUGUI[] abilityCds;
+    [SerializeField] TextMeshProUGUI damageText;
+    [SerializeField] TextMeshProUGUI attackspeedText;
 
     float[] cooldowns;
     float[] cooldownsRemaining;
@@ -75,5 +77,11 @@ public class Hud : MonoBehaviour
     {
         hpSlider.value = (float)currentHp / maxHp;
         hpText.text = currentHp + "/" + maxHp;
+    }
+
+    public void UpdateHudStats(int damage, float attackspeed)
+    {
+        damageText.text = "DMG: " + damage;
+        attackspeedText.text = "AS: " + attackspeed.ToString("0.00");
     }
 }

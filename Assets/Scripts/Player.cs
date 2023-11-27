@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.VFX;
 
 public class Player : MonoBehaviour
 {
@@ -21,9 +22,14 @@ public class Player : MonoBehaviour
     bool canAct = true;
     int hp;
 
+    float asMultiplier = 1f;
+    float damageMultiplier = 1f;
+
     [Header("Assignables")]
-    [SerializeField] LayerMask walkLayers;
+    [SerializeField] LayerMask clickabeLayers;
+    [SerializeField] LayerMask groundLayer;
     [SerializeField] Transform modelTransform;
+    [SerializeField] GameObject abilityProjectile;
 
     [Header("Stats")]
     public int maxHp = 500;
@@ -44,6 +50,8 @@ public class Player : MonoBehaviour
 
         hp = maxHp;
         hud.UpdateHealthBar(maxHp, hp);
+
+        UpdateStats();
     }
 
     // Update is called once per frame
@@ -71,6 +79,11 @@ public class Player : MonoBehaviour
         {
             playerState = State.Moving;
         }
+
+        if (!canAct)
+        {
+            Freezing();
+        }
     }
 
     void Attacking()
@@ -91,7 +104,7 @@ public class Player : MonoBehaviour
             if (attackCd <= 0f)
             {
                 animator.SetTrigger("attack");
-                attackCd = 1f / attackSpeed;
+                attackCd = 1f / (attackSpeed * asMultiplier);
             }
 
             Quaternion targetRot = Quaternion.LookRotation(targetEnemy.transform.position - transform.position, Vector3.up);
@@ -112,17 +125,26 @@ public class Player : MonoBehaviour
         if (ability1CdRemaining > 0f)
             return;
 
-        agent.SetDestination(transform.position + transform.forward * 4f);
+        //agent.SetDestination(transform.position + transform.forward * 4f);
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         animator.SetTrigger("ability1");
         hud.SetCooldown(1, ability1Cd);
         ability1CdRemaining = ability1Cd;
         Freeze(freezeTime);
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = 50f;
+        Vector3 raycastDir = Camera.main.ScreenToWorldPoint(mousePos) - Camera.main.transform.position;
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.transform.position, raycastDir, out hit, 300f, groundLayer))
+        {
+            transform.forward = hit.point - transform.position;
+        }
     }
 
     public void Ability1()
     {
-        
+        GameObject go = Instantiate(abilityProjectile, modelTransform.position + Vector3.up, modelTransform.rotation);
+        go.GetComponent<Projectile>().Setup((int)damage * 2, 5, 40f, 10f);
     }
 
     void ModifyHealth(int amount)
@@ -154,6 +176,11 @@ public class Player : MonoBehaviour
         targetEnemy = null;
     }
 
+    void Freezing()
+    {
+        agent.nextPosition = modelTransform.position;
+    }
+
     void FreezeEnd()
     {
         canAct = true;
@@ -181,7 +208,7 @@ public class Player : MonoBehaviour
             mousePos.z = 50f;
             Vector3 raycastDir = Camera.main.ScreenToWorldPoint(mousePos) - Camera.main.transform.position;
             RaycastHit hit;
-            if (Physics.Raycast(Camera.main.transform.position, raycastDir, out hit, 300f, walkLayers))
+            if (Physics.Raycast(Camera.main.transform.position, raycastDir, out hit, 300f, clickabeLayers))
             {
                 timer = 0f;
                 if (hit.transform.tag == "Enemy")
@@ -198,7 +225,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Ability1Used(0.9f);
+            Ability1Used(0.8f);
         }
     }
 
@@ -226,7 +253,7 @@ public class Player : MonoBehaviour
         animator.SetFloat("locomotion", velocity.magnitude);
 
         float deltaMagnitude = worldDeltaPos.magnitude;
-        if (deltaMagnitude > agent.radius / 2)
+        if (deltaMagnitude > agent.radius / 4)
         {
             transform.position = Vector3.Lerp(animator.rootPosition, agent.nextPosition, smooth);
             modelTransform.position = transform.position;
@@ -239,6 +266,14 @@ public class Player : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
         hud = Hud.i;
+    }
+
+    public void UpdateStats()
+    {
+        asMultiplier = 15.2f;
+        animator.SetFloat("asMultiplier", asMultiplier);
+
+        hud.UpdateHudStats((int)(damage * damageMultiplier), attackSpeed * asMultiplier);
     }
 }
 
