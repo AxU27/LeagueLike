@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.VFX;
 
 public class Player : MonoBehaviour
 {
@@ -11,6 +7,7 @@ public class Player : MonoBehaviour
     NavMeshAgent agent;
     Animator animator;
     Hud hud;
+    GameManager gameManager;
 
     State playerState = State.Idle;
     Vector2 velocity;
@@ -21,10 +18,23 @@ public class Player : MonoBehaviour
     float timer;
     bool canAct = true;
     int hp;
+    int maxHp;
+    int damage;
+    float attackSpeed;
+    float attackRange;
+    float movementSpeed;
+    int defence;
+    int crit;
+    int cdr;
 
+    int hpIncrease;
     float asMultiplier = 1f;
     int damageIncrease;
     int defenseIncrease;
+    int critIncrease;
+    int cdrIncrease;
+    float msMultiplier = 1f;
+    float attackRangeIncrease;
 
     [Header("Assignables")]
     [SerializeField] LayerMask clickabeLayers;
@@ -33,12 +43,14 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject abilityProjectile;
 
     [Header("Stats")]
-    public int maxHp = 500;
-    public float damage = 50f;
-    public float attackRange = 3f;
-    public float movementSpeed = 4f;
-    public float attackSpeed = 1f;
-    public int defence = 10;
+    public int baseMaxHp = 500;
+    public int baseDamage = 50;
+    public float baseAttackRange = 3f;
+    public float baseMovementSpeed = 4f;
+    public float baseAttackSpeed = 1f;
+    public int baseDefence = 10;
+    public int baseCrit = 0;
+    public int baseCdr = 0;
     [SerializeField] float ability1Cd, ability2Cd, ability3Cd, ability4Cd;
 
     public delegate void OnHit(Enemy enemy);
@@ -53,9 +65,7 @@ public class Player : MonoBehaviour
         agent.updatePosition = false;
         agent.updateRotation = true;
 
-        hp = maxHp;
-        hud.UpdateHealthBar(maxHp, hp);
-
+        hp = baseMaxHp;
         UpdateStats();
     }
 
@@ -93,7 +103,7 @@ public class Player : MonoBehaviour
 
     void Attacking()
     {
-        if (attackRange < (targetEnemy.transform.position - transform.position).magnitude)
+        if (baseAttackRange < (targetEnemy.transform.position - transform.position).magnitude)
         {
             timer -= Time.deltaTime;
             if (timer <= 0f)
@@ -109,7 +119,7 @@ public class Player : MonoBehaviour
             if (attackCd <= 0f)
             {
                 animator.SetTrigger("attack");
-                attackCd = 1f / (attackSpeed * asMultiplier);
+                attackCd = 1f / (baseAttackSpeed * asMultiplier);
             }
 
             Quaternion targetRot = Quaternion.LookRotation(targetEnemy.transform.position - transform.position, Vector3.up);
@@ -121,7 +131,7 @@ public class Player : MonoBehaviour
     {
         if (targetEnemy != null)
         {
-            targetEnemy.TakeDamage(damage + damageIncrease);
+            targetEnemy.TakeDamage(baseDamage + damageIncrease);
             onHit?.Invoke(targetEnemy);
         }
     }
@@ -150,14 +160,14 @@ public class Player : MonoBehaviour
     public void Ability1()
     {
         GameObject go = Instantiate(abilityProjectile, modelTransform.position + Vector3.up, modelTransform.rotation);
-        go.GetComponent<Projectile>().Setup((int)damage * 2, 5, 40f, 10f);
+        go.GetComponent<Projectile>().Setup((int)baseDamage * 2, 5, 40f, 10f);
     }
 
     void ModifyHealth(int amount)
     {
         hp += amount;
 
-        hud.UpdateHealthBar(maxHp, hp);
+        hud.UpdateHealthBar(baseMaxHp, hp);
 
         //Check if dead
     }
@@ -272,25 +282,47 @@ public class Player : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
         hud = Hud.i;
+        gameManager = GameManager.i;
     }
 
     public void UpdateStats()
     {
+        hpIncrease = 0;
         asMultiplier = 1f;
+        msMultiplier = 1f;
         damageIncrease = 0;
         defenseIncrease = 0;
-        GameManager.i.GetItemStats(this);
+        critIncrease = 0;
+        cdrIncrease = 0;
+        attackRangeIncrease = 0;
+
+        gameManager.GetItemStats(this);
+
+        maxHp = baseMaxHp + hpIncrease;
+        attackSpeed = baseAttackSpeed * asMultiplier;
+        movementSpeed = baseMovementSpeed * msMultiplier;
+        damage = baseDamage + damageIncrease;
+        defence = baseDefence + defenseIncrease;
+        crit = baseCrit + critIncrease;
+        cdr = baseCdr + cdrIncrease;
+        attackRange = baseAttackRange + attackRangeIncrease;
 
         animator.SetFloat("asMultiplier", asMultiplier);
-
-        hud.UpdateHudStats((int)(damage + damageIncrease), attackSpeed * asMultiplier);
+        animator.SetFloat("msMultiplier", msMultiplier);
+        hud.UpdateHudStats(damage, attackSpeed, crit, defence, movementSpeed, cdr);
+        hud.UpdateHealthBar(maxHp, hp);
     }
 
-    public void AddStats(float asMult, int damageInc, int defenceInc)
+    public void AddStats(int hpInc, float asMult, float msMult, int damageInc, int defenceInc, int critInc, int cdrInc, float arInc)
     {
+        maxHp += hpInc;
         asMultiplier += asMult;
+        msMultiplier += msMult;
         damageIncrease += damageInc;
         defenseIncrease += defenceInc;
+        critIncrease += critInc;
+        cdrIncrease += cdrInc;
+        attackRangeIncrease += arInc;
     }
 }
 

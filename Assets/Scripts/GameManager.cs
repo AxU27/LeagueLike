@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager i;
 
-    [SerializeField] Item[] items;
+    [SerializeField] List<Item> items;
 
     private void Awake()
     {
@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
         {
             i = this;
         }
+
+        items = new List<Item>();
     }
 
     public void GetItemStats(Player player)

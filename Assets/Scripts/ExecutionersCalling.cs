@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class ExecutionersCalling : Item
 {
-    private void Start()
-    {
-        asMultiplier = 0f;
-        damageIncrease = 20;
-        defenceIncrease = 0;
-    }
-
     public override void OnHit(Enemy e)
     {
         if (e.hp <= e.maxHp / 10)
