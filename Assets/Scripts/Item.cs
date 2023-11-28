@@ -23,7 +23,7 @@ public class Item : MonoBehaviour
         player.AddStats(maxHpIncrease, asMultiplier, msMultiplier, damageIncrease, defenceIncrease, critIncrease, cdrIncrease, attackRangeIncrease);
     }
 
-    public virtual void OnHit(Enemy e)
+    public virtual void OnHit(Enemy e, Player p)
     {
         
     }

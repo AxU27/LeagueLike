@@ -13,7 +13,8 @@ public class Player : MonoBehaviour
     Vector2 velocity;
     Vector2 smoothDeltaPos;
     Enemy targetEnemy;
-    float attackCd;
+    [HideInInspector]
+    public float attackCd;
     float ability1CdRemaining;
     float timer;
     bool canAct = true;
@@ -53,7 +54,7 @@ public class Player : MonoBehaviour
     public int baseCdr = 0;
     [SerializeField] float ability1Cd, ability2Cd, ability3Cd, ability4Cd;
 
-    public delegate void OnHit(Enemy enemy);
+    public delegate void OnHit(Enemy enemy, Player player);
     public static OnHit onHit;
 
     // Start is called before the first frame update
@@ -132,7 +133,7 @@ public class Player : MonoBehaviour
         if (targetEnemy != null)
         {
             targetEnemy.TakeDamage(baseDamage + damageIncrease);
-            onHit?.Invoke(targetEnemy);
+            onHit?.Invoke(targetEnemy, this);
         }
     }
 

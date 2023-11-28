@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour
             i = this;
         }
 
-        items = new List<Item>();
     }
 
     public void GetItemStats(Player player)

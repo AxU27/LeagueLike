@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExecutionersCalling : Item
 {
-    public override void OnHit(Enemy e)
+    public override void OnHit(Enemy e, Player p)
     {
         if (e.hp <= e.maxHp / 10)
         {
