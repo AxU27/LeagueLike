@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8840541505749728327
 MonoBehaviour:
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Executioners Calling
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   maxHpIncrease: 0
   asMultiplier: 0
   msMultiplier: 0
@@ -54,3 +54,4 @@ MonoBehaviour:
   critIncrease: 0
   cdrIncrease: 10
   attackRangeIncrease: 0
+  effect: {fileID: 656651710569726630, guid: eaea4463a3644a50954d62d01e05c26c, type: 3}

@@ -153,9 +153,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemiesToSpawn:
-  - enemy: {fileID: 797043259265542051, guid: 42c5493a5da159c409f4ca92b09d04d4, type: 3}
+  - enemy: {fileID: 797043259265542051, guid: b64579acc0d3a3542bdc5ccfe5796f3e, type: 3}
     position: {x: 0, y: 0}
-  - enemy: {fileID: 797043259265542051, guid: 42c5493a5da159c409f4ca92b09d04d4, type: 3}
+  - enemy: {fileID: 797043259265542051, guid: b64579acc0d3a3542bdc5ccfe5796f3e, type: 3}
     position: {x: 10, y: 0}
   - enemy: {fileID: 797043259265542051, guid: 42c5493a5da159c409f4ca92b09d04d4, type: 3}
     position: {x: -10, y: 0}

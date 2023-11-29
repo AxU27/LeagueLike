@@ -1,3 +1,4 @@
+using HighlightPlus;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour
     [Header("Assignables")]
     [SerializeField] LayerMask clickabeLayers;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] LayerMask interactLayer;
     [SerializeField] Transform modelTransform;
     [SerializeField] GameObject abilityProjectile;
 
@@ -61,6 +63,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         GetReferences();
+        gameManager.player = this;
         animator.applyRootMotion = true;
 
         agent.updatePosition = false;
@@ -132,7 +135,11 @@ public class Player : MonoBehaviour
     {
         if (targetEnemy != null)
         {
-            targetEnemy.TakeDamage(baseDamage + damageIncrease);
+            float c = 1f;
+            if (Random.Range(0, 100) < crit)
+                c = 2f;
+
+            targetEnemy.TakeDamage((baseDamage + damageIncrease) * c);
             onHit?.Invoke(targetEnemy, this);
         }
     }
@@ -161,7 +168,7 @@ public class Player : MonoBehaviour
     public void Ability1()
     {
         GameObject go = Instantiate(abilityProjectile, modelTransform.position + Vector3.up, modelTransform.rotation);
-        go.GetComponent<Projectile>().Setup((int)baseDamage * 2, 5, 40f, 10f);
+        go.GetComponent<Projectile>().Setup(damage * 2, 5, 40f, 10f, null, null);
     }
 
     void ModifyHealth(int amount)
@@ -231,12 +238,25 @@ public class Player : MonoBehaviour
                 if (hit.transform.tag == "Enemy")
                 {
                     targetEnemy = hit.transform.GetComponent<Enemy>();
+                    targetEnemy.GetComponent<HighlightEffect>().HitFX();
                 }
                 else
                 {
                     targetEnemy = null;
                     agent.SetDestination(hit.point);
                 }
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = 50f;
+            Vector3 raycastDir = Camera.main.ScreenToWorldPoint(mousePos) - Camera.main.transform.position;
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.transform.position, raycastDir, out hit, 300f, interactLayer))
+            {
+                hit.transform.GetComponent<IInteractable>().Interact(this);
             }
         }
 
@@ -307,6 +327,8 @@ public class Player : MonoBehaviour
         crit = baseCrit + critIncrease;
         cdr = baseCdr + cdrIncrease;
         attackRange = baseAttackRange + attackRangeIncrease;
+
+        agent.speed = movementSpeed;
 
         animator.SetFloat("asMultiplier", asMultiplier);
         animator.SetFloat("msMultiplier", msMultiplier);

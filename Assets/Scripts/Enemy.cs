@@ -15,12 +15,13 @@ public class Enemy : MonoBehaviour
     [Header("Stats")]
     public float maxHp = 100f;
     public float attackRange = 2f;
-    public float damage = 20f;
+    public int damage = 20;
     public float attackSpeed = 0.5f;
 
     Vector2 velocity;
     Vector2 smoothDeltaPos;
-    Player player;
+    [HideInInspector]
+    public Player player;
     [HideInInspector]
     public float hp;
     float timer;
@@ -103,7 +104,7 @@ public class Enemy : MonoBehaviour
     {
         if (player != null)
         {
-            player.TakeDamage((int)damage);
+            player.TakeDamage(damage);
         }
     }
 

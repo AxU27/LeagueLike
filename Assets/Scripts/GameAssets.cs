@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameAssets : MonoBehaviour
 {
     public GameObject[] itemPrefabs;
-
+    public GameObject[] lootDropPrefabs;
     public GameObject[] enemyPrefabs;
 
     public static GameAssets i;
