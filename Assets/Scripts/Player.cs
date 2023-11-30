@@ -64,10 +64,10 @@ public class Player : MonoBehaviour
     {
         GetReferences();
         gameManager.player = this;
-        animator.applyRootMotion = true;
+        animator.applyRootMotion = false;
 
-        agent.updatePosition = false;
-        agent.updateRotation = true;
+        agent.updatePosition = true;
+        agent.updateRotation = false;
 
         hp = baseMaxHp;
         UpdateStats();
@@ -77,7 +77,15 @@ public class Player : MonoBehaviour
     void Update()
     {
         GetInput();
-        SyncAnimatorAndAgent();
+        //SyncAnimatorAndAgent();
+        bool shouldMove = agent.velocity.magnitude > 0.5f;
+        animator.SetBool("move", shouldMove);
+        animator.SetFloat("locomotion", agent.velocity.magnitude);
+
+        if (agent.desiredVelocity.magnitude > 0f)
+        {
+            transform.forward = Vector3.Lerp(transform.forward, agent.desiredVelocity, 7 * Time.deltaTime);
+        }
 
         if (attackCd > 0f)
             attackCd -= Time.deltaTime;
@@ -151,6 +159,7 @@ public class Player : MonoBehaviour
 
         //agent.SetDestination(transform.position + transform.forward * 4f);
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+        animator.applyRootMotion = true;
         animator.SetTrigger("ability1");
         hud.SetCooldown(1, ability1Cd);
         ability1CdRemaining = ability1Cd;
@@ -196,7 +205,6 @@ public class Player : MonoBehaviour
     {
         Invoke("FreezeEnd", freezeTime);
         canAct = false;
-        agent.updateRotation = false;
         targetEnemy = null;
     }
 
@@ -208,7 +216,7 @@ public class Player : MonoBehaviour
     void FreezeEnd()
     {
         canAct = true;
-        agent.updateRotation = true;
+        animator.applyRootMotion = false;
         agent.ResetPath();
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
     }
