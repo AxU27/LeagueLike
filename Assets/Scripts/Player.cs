@@ -157,7 +157,7 @@ public class Player : MonoBehaviour
         if (ability1CdRemaining > 0f)
             return;
 
-        //agent.SetDestination(transform.position + transform.forward * 4f);
+        agent.ResetPath();
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         animator.applyRootMotion = true;
         animator.SetTrigger("ability1");
@@ -210,6 +210,8 @@ public class Player : MonoBehaviour
 
     void Freezing()
     {
+        transform.position = modelTransform.position;
+        modelTransform.position = transform.position;
         agent.nextPosition = modelTransform.position;
     }
 
@@ -221,13 +223,6 @@ public class Player : MonoBehaviour
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
     }
 
-    private void OnAnimatorMove()
-    {
-        Vector3 rootPos = animator.rootPosition;
-        rootPos.y = agent.nextPosition.y;
-        transform.position = rootPos;
-        agent.nextPosition = rootPos;
-    }
 
     void GetInput()
     {
@@ -271,37 +266,6 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Ability1Used(0.8f);
-        }
-    }
-
-    void SyncAnimatorAndAgent()
-    {
-        Vector3 worldDeltaPos = agent.nextPosition - transform.position;
-        worldDeltaPos.y = 0f;
-
-        float dx = Vector3.Dot(transform.right, worldDeltaPos);
-        float dy = Vector3.Dot(transform.forward, worldDeltaPos);
-        Vector2 deltaPos = new Vector2(dx, dy);
-
-        float smooth = Mathf.Min(1, Time.deltaTime / 0.1f);
-        smoothDeltaPos = Vector2.Lerp(smoothDeltaPos, deltaPos, smooth);
-
-        velocity = smoothDeltaPos / Time.deltaTime;
-        if (agent.remainingDistance <= agent.stoppingDistance)
-        {
-            velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
-        }
-
-        bool shouldMove = velocity.magnitude > 0.5f && agent.remainingDistance > agent.stoppingDistance;
-
-        animator.SetBool("move", shouldMove);
-        animator.SetFloat("locomotion", velocity.magnitude);
-
-        float deltaMagnitude = worldDeltaPos.magnitude;
-        if (deltaMagnitude > agent.radius / 4)
-        {
-            transform.position = Vector3.Lerp(animator.rootPosition, agent.nextPosition, smooth);
-            modelTransform.position = transform.position;
         }
     }
 

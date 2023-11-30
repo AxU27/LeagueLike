@@ -558,6 +558,7 @@ MonoBehaviour:
   attackRange: 2
   damage: 20
   attackSpeed: 0.5
+  player: {fileID: 0}
   hp: 0
   attackCd: 0
 --- !u!114 &5778370786168571397
@@ -572,7 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888380afc233049ce9e618f9f36c8ba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile: {fileID: 0}
+  profile: {fileID: 11400000, guid: b91b607044edf8e4eb356d81348fc732, type: 2}
   profileSync: 0
   camerasLayerMask:
     serializedVersion: 2
@@ -730,8 +731,8 @@ MonoBehaviour:
   seeThroughTextureScale: 1
   seeThroughChildrenSortingMode: 0
   rmsCount: 2
-  hitFxInitialIntensity: 1
-  hitFxMode: 1
+  hitFxInitialIntensity: 0.5
+  hitFxMode: 0
   hitFxFadeOutDuration: 0.25
   hitFxColor: {r: 1, g: 0, b: 0, a: 1}
   hitFxRadius: 0.5

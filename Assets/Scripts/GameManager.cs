@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<Item> items;
     [SerializeField] int itemCap = 10;
 
+    int tokens;
+
     private void Awake()
     {
         if (i != null && i != this)
@@ -44,5 +46,16 @@ public class GameManager : MonoBehaviour
         {
             item.AddStats(player);
         }
+    }
+
+    public void AddTokens(int amount)
+    {
+        tokens += amount;
+        //Update hud
+    }
+
+    public int GetTokens()
+    {
+        return tokens;
     }
 }

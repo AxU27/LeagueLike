@@ -10,8 +10,10 @@ public class Hud : MonoBehaviour
 
     [SerializeField] Slider hpSlider;
     [SerializeField] TextMeshProUGUI hpText;
+
     [SerializeField] Slider[] abilitySliders;
     [SerializeField] TextMeshProUGUI[] abilityCds;
+
     [SerializeField] TextMeshProUGUI damageText;
     [SerializeField] TextMeshProUGUI attackspeedText;
     [SerializeField] TextMeshProUGUI defenceText;

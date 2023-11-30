@@ -550,7 +550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888380afc233049ce9e618f9f36c8ba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile: {fileID: 0}
+  profile: {fileID: 11400000, guid: b91b607044edf8e4eb356d81348fc732, type: 2}
   profileSync: 0
   camerasLayerMask:
     serializedVersion: 2
@@ -708,8 +708,8 @@ MonoBehaviour:
   seeThroughTextureScale: 1
   seeThroughChildrenSortingMode: 0
   rmsCount: 2
-  hitFxInitialIntensity: 1
-  hitFxMode: 1
+  hitFxInitialIntensity: 0.5
+  hitFxMode: 0
   hitFxFadeOutDuration: 0.25
   hitFxColor: {r: 1, g: 0, b: 0, a: 1}
   hitFxRadius: 0.5
@@ -789,13 +789,12 @@ MonoBehaviour:
   modelTransform: {fileID: 4273875357732765163}
   maxHp: 100
   attackRange: 7
-  damage: 20
+  damage: 10
   attackSpeed: 0.5
   player: {fileID: 0}
   hp: 0
   attackCd: 0
-  projectile: {fileID: 5507355899372241740, guid: 525bff851623f4c4cbaaebb3dc28ae92,
-    type: 3}
+  projectile: {fileID: 1603392920371116, guid: 87c53553bfdb9a64db70d0405845945c, type: 3}
 --- !u!1 &981437213133973623
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,13 +10,15 @@ public class ShopUi : MonoBehaviour
 
     GameObject[] itemReferances;
     Item[] items;
+    int[] itemPrices;
 
-    public void OpenShop(GameObject[] itemRefs)
+    public void OpenShop(GameObject[] itemRefs, int[] prices)
     {
         shopWindow.SetActive(true);
 
         itemReferances = itemRefs;
         items = new Item[itemRefs.Length];
+        itemPrices = prices;
 
         for (int i = 0; i < itemRefs.Length; i++)
         {
@@ -32,7 +34,8 @@ public class ShopUi : MonoBehaviour
 
     public void BuyItem(int item)
     {
-        GameManager.i.AddItem(itemReferances[item]);
+        if (itemPrices[item] <= GameManager.i.GetTokens())
+            GameManager.i.AddItem(itemReferances[item]);
     }
 
     public static ShopUi i;

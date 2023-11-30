@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Shop : MonoBehaviour, IInteractable
 {
+    [SerializeField] int[] itemPrices; 
     GameObject[] items;
     float interactDistance = 3f;
 
@@ -11,7 +12,7 @@ public class Shop : MonoBehaviour, IInteractable
     {
         if ((player.transform.position - transform.position).magnitude < interactDistance)
         {
-            ShopUi.i.OpenShop(items);
+            ShopUi.i.OpenShop(items, itemPrices);
         }
     }
 
