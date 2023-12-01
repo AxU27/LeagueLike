@@ -35,7 +35,12 @@ public class ShopUi : MonoBehaviour
     public void BuyItem(int item)
     {
         if (itemPrices[item] <= GameManager.i.GetTokens())
-            GameManager.i.AddItem(itemReferances[item]);
+        {
+            if (GameManager.i.AddItem(itemReferances[item]))
+            {
+                GameManager.i.AddTokens(-itemPrices[item]);
+            }
+        }
     }
 
     public static ShopUi i;
@@ -50,5 +55,15 @@ public class ShopUi : MonoBehaviour
         {
             i = this;
         }
+    }
+
+    public void ShowTooltip(int item)
+    {
+        ItemTooltip.ShowItemToolTip(items[item].itemName, items[item].itemDescription);
+    }
+
+    public void HideToolTip()
+    {
+        ItemTooltip.HideItemToolTip();
     }
 }

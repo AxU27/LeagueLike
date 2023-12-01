@@ -55,6 +55,7 @@ public class Room : MonoBehaviour
                     gameManager.roomActive = false;
                     doors.SetActive(false);
                     cleared = true;
+                    gameManager.AddTokens(Random.Range(0, 4));
                 }
             }
         }

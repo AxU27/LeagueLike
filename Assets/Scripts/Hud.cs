@@ -21,6 +21,8 @@ public class Hud : MonoBehaviour
     [SerializeField] TextMeshProUGUI movespeedText;
     [SerializeField] TextMeshProUGUI cdrText;
 
+    [SerializeField] TextMeshProUGUI tokenText;
+
     float[] cooldowns;
     float[] cooldownsRemaining;
 
@@ -93,5 +95,10 @@ public class Hud : MonoBehaviour
         defenceText.text = defence.ToString();
         movespeedText.text = ((int)(movespeed * 100)).ToString();
         cdrText.text = cdr + "%";
+    }
+
+    public void UpdateTokens(int tokens)
+    {
+        tokenText.text = tokens.ToString();
     }
 }

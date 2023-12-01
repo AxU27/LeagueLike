@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     public void AddTokens(int amount)
     {
         tokens += amount;
-        //Update hud
+        Hud.i.UpdateTokens(tokens);
     }
 
     public int GetTokens()

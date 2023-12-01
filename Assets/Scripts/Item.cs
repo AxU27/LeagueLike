@@ -7,6 +7,7 @@ public class Item : MonoBehaviour
 {
     public string itemName;
     public Sprite itemIcon;
+    public string itemDescription;
 
     public int maxHpIncrease;
     public float asMultiplier;
