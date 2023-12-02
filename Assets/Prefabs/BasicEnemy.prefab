@@ -463,9 +463,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1736724504583600884}
+  - component: {fileID: 1816807090516263480}
   - component: {fileID: 197691049451795372}
   - component: {fileID: 6003126899764787751}
-  - component: {fileID: 1816807090516263480}
   - component: {fileID: 5778370786168571397}
   - component: {fileID: 1641261305918510124}
   - component: {fileID: 1777131915170971003}
@@ -493,6 +493,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1816807090516263480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797043259265542051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2fb4e57f533e554fbbe1357ff004da3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hpSlider: {fileID: 3395452468275281267}
+  animator: {fileID: 666946644696695637}
+  agent: {fileID: 6003126899764787751}
+  modelTransform: {fileID: 4273875357732765163}
+  maxHp: 100
+  attackRange: 2
+  damage: 20
+  attackSpeed: 0.5
+  player: {fileID: 0}
+  hp: 0
+  attackCd: 0
+  dead: 0
 --- !u!136 &197691049451795372
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -538,29 +562,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1816807090516263480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 797043259265542051}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2fb4e57f533e554fbbe1357ff004da3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hpSlider: {fileID: 3395452468275281267}
-  animator: {fileID: 666946644696695637}
-  agent: {fileID: 6003126899764787751}
-  modelTransform: {fileID: 4273875357732765163}
-  maxHp: 100
-  attackRange: 2
-  damage: 20
-  attackSpeed: 0.5
-  player: {fileID: 0}
-  hp: 0
-  attackCd: 0
 --- !u!114 &5778370786168571397
 MonoBehaviour:
   m_ObjectHideFlags: 0

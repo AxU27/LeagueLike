@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4933318106074203487
+--- !u!1 &1614345541828449323
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6995289990802188197}
-  - component: {fileID: 5319200597735425288}
+  - component: {fileID: 8665754719636540297}
+  - component: {fileID: -6231479836878049428}
   m_Layer: 0
-  m_Name: Plasma Katana
+  m_Name: BossRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6995289990802188197
+--- !u!4 &8665754719636540297
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4933318106074203487}
+  m_GameObject: {fileID: 1614345541828449323}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,27 +32,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5319200597735425288
+--- !u!114 &-6231479836878049428
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4933318106074203487}
+  m_GameObject: {fileID: 1614345541828449323}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0041cdcfae1a3624ebc7e50493126968, type: 3}
+  m_Script: {fileID: 11500000, guid: cba894ad66fde264388134fa6e98c596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Plasma Katana
-  itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  itemDescription: 'On hit: deal additional 10 damage'
-  maxHpIncrease: 0
-  asMultiplier: 0.2
-  msMultiplier: 0
-  damageIncrease: 0
-  defenceIncrease: 0
-  critIncrease: 15
-  cdrIncrease: 0
-  attackRangeIncrease: 0
-  vampIncrease: 0.2
+  enemiesToSpawn:
+  - enemy: {fileID: 7076268807984807144, guid: ef7feeff6df0c0045812845df018e3d2, type: 3}
+    position: {x: 0, y: 0}
+  isBossRoom: 1

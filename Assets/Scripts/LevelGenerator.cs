@@ -8,6 +8,7 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] GameObject baseRoom;
     [SerializeField] int roomAmount = 7;
     [SerializeField] GameObject[] normalRooms;
+    [SerializeField] GameObject bossRoom;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +25,8 @@ public class LevelGenerator : MonoBehaviour
             if (rooms[i].type == RoomType.Normal)
                 Instantiate(normalRooms[Random.Range(0, normalRooms.Length)], rooms[i].transform);
         }
+
+        Instantiate(bossRoom, rooms[^1].transform);
 
         gameObject.GetComponent<NavMeshSurface>().BuildNavMesh();
     }

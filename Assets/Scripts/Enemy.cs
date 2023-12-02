@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
     public float attackRange = 2f;
     public int damage = 20;
     public float attackSpeed = 0.5f;
+    public int defence = 0;
 
     Vector2 velocity;
     Vector2 smoothDeltaPos;
@@ -65,6 +66,7 @@ public class Enemy : MonoBehaviour
 
     public int TakeDamage(float amount)
     {
+        amount = (int)(amount * (100f / (100f + defence)));
         hp -= amount;
         UpdateHealthBar();
 

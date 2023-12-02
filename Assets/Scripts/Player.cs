@@ -198,7 +198,7 @@ public class Player : MonoBehaviour
 
     public int TakeDamage(int amount)
     {
-        amount = (int)(amount * (100f / (100f + amount)));
+        amount = (int)(amount * (100f / (100f + defence)));
         ModifyHealth(-amount);
         //OnDamageTaken
         return amount;
