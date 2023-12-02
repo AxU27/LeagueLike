@@ -17,7 +17,7 @@ public class LevelGenerator : MonoBehaviour
         rooms[0].type = RoomType.Spawn;
         rooms[^1].type = RoomType.Boss;
 
-        rooms[Random.Range(1, rooms.Length - 1)].type = RoomType.Shop;
+        rooms[Random.Range(1, rooms.Length - 1)].type = RoomType.Workshop;
 
         for (int i = 1; i < rooms.Length; i++)
         {

@@ -57,9 +57,9 @@ public class ShopUi : MonoBehaviour
         }
     }
 
-    public void ShowTooltip(int item)
+    public void ShowTooltip(int i)
     {
-        ItemTooltip.ShowItemToolTip(items[item].itemName, items[item].itemDescription);
+        ItemTooltip.ShowItemToolTip(items[i].itemName, items[i].itemDescription, items[i].GetStatsString(), items[i].itemIcon);
     }
 
     public void HideToolTip()

@@ -46,6 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Executioners Calling
   itemIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  itemDescription: 'On hit: Hit enemies below 15% max health explode dealing 15%
+    of max health to nearby enemies as damage.'
   maxHpIncrease: 0
   asMultiplier: 0
   msMultiplier: 0

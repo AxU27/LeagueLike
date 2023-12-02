@@ -8,12 +8,15 @@ public class Hud : MonoBehaviour
 {
     public static Hud i;
 
+    [Header("Health")]
     [SerializeField] Slider hpSlider;
     [SerializeField] TextMeshProUGUI hpText;
 
+    [Header("Abilities")]
     [SerializeField] Slider[] abilitySliders;
     [SerializeField] TextMeshProUGUI[] abilityCds;
 
+    [Header("Stats")]
     [SerializeField] TextMeshProUGUI damageText;
     [SerializeField] TextMeshProUGUI attackspeedText;
     [SerializeField] TextMeshProUGUI defenceText;
@@ -23,8 +26,13 @@ public class Hud : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI tokenText;
 
+    [Header("Items")]
+    [SerializeField] Image[] itemImages;
+
+
     float[] cooldowns;
     float[] cooldownsRemaining;
+    List<Item> items;
 
     private void Awake()
     {
@@ -47,6 +55,8 @@ public class Hud : MonoBehaviour
                 abilityCds[i].enabled = false;
             }
         }
+
+        items = new List<Item>();
     }
 
 
@@ -95,6 +105,34 @@ public class Hud : MonoBehaviour
         defenceText.text = defence.ToString();
         movespeedText.text = ((int)(movespeed * 100)).ToString();
         cdrText.text = cdr + "%";
+    }
+
+    public void UpdateInventory(List<Item> it)
+    {
+        items = it;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            itemImages[i].sprite = items[i].itemIcon;
+        }
+
+        for (int i = items.Count; i < 10; i++) 
+        {
+            itemImages[i].sprite = null;
+        }
+    }
+
+    public void ShowTooltip(int i)
+    {
+        if (items.Count <= i)
+            return;
+        if (items[i] != null)
+            ItemTooltip.ShowItemToolTip(items[i].itemName, items[i].itemDescription, items[i].GetStatsString(), items[i].itemIcon);
+    }
+
+    public void HideToolTip()
+    {
+        ItemTooltip.HideItemToolTip();
     }
 
     public void UpdateTokens(int tokens)

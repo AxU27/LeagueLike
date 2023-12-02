@@ -34,6 +34,11 @@ public class ItemTooltip : MonoBehaviour
         canvasRectTransform = transform.parent.GetComponent<RectTransform>();
     }
 
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update()
     {

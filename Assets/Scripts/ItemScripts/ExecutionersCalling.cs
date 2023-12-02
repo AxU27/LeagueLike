@@ -8,7 +8,7 @@ public class ExecutionersCalling : Item
 
     public override void OnHit(Enemy e, Player p)
     {
-        if (e.hp <= e.maxHp / 10)
+        if (e.hp <= e.maxHp * 0.15f)
         {
             Collider[] cols = Physics.OverlapSphere(e.transform.position, 3f, LayerMask.GetMask("Clickable"));
 
@@ -16,7 +16,7 @@ public class ExecutionersCalling : Item
             {
                 if (col.tag == "Enemy")
                 {
-                    col.GetComponent<Enemy>().TakeDamage(e.maxHp / 10);
+                    col.GetComponent<Enemy>().TakeDamage(e.maxHp * 0.15f);
                 }
             }
 

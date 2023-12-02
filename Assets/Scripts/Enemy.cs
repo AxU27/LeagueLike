@@ -27,6 +27,7 @@ public class Enemy : MonoBehaviour
     float timer;
     [HideInInspector]
     public float attackCd;
+    public bool dead;
 
     public delegate void OnEnemyDeath();
     public static OnEnemyDeath onEnemyDeath;
@@ -48,25 +49,38 @@ public class Enemy : MonoBehaviour
     {
         SyncAnimatorAndAgent();
 
-        if (player != null)
-        {
-            FollowAndAttack();
-        }
+        Behavior();
 
         if (attackCd > 0f)
             attackCd -= Time.deltaTime;
     }
 
-    public void TakeDamage(float amount)
+    public virtual void Behavior()
+    {
+        if (player != null && !dead)
+        {
+            FollowAndAttack();
+        }
+    }
+
+    public int TakeDamage(float amount)
     {
         hp -= amount;
         UpdateHealthBar();
 
-        if (hp <= 0f)
+        if (hp <= 0f && !dead)
         {
+            dead = true;
             onEnemyDeath?.Invoke();
-            Destroy(gameObject);
+            Die();
         }
+
+        return (int)amount;
+    }
+
+    public virtual void Die()
+    {
+        Destroy(gameObject);
     }
 
     void UpdateHealthBar()

@@ -1,4 +1,5 @@
 using HighlightPlus;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -28,6 +29,7 @@ public class Player : MonoBehaviour
     int defence;
     int crit;
     int cdr;
+    float vamp;
 
     int hpIncrease;
     float asMultiplier = 1f;
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour
     int cdrIncrease;
     float msMultiplier = 1f;
     float attackRangeIncrease;
+    float vampIncrease;
 
     [Header("Assignables")]
     [SerializeField] LayerMask clickabeLayers;
@@ -54,6 +57,7 @@ public class Player : MonoBehaviour
     public int baseDefence = 10;
     public int baseCrit = 0;
     public int baseCdr = 0;
+    public float baseVamp = 0f;
     [SerializeField] float ability1Cd, ability2Cd, ability3Cd, ability4Cd;
 
     public delegate void OnHit(Enemy enemy, Player player);
@@ -77,7 +81,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         GetInput();
-        //SyncAnimatorAndAgent();
         bool shouldMove = agent.velocity.magnitude > 0.5f;
         animator.SetBool("move", shouldMove);
         animator.SetFloat("locomotion", agent.velocity.magnitude);
@@ -115,7 +118,7 @@ public class Player : MonoBehaviour
 
     void Attacking()
     {
-        if (baseAttackRange < (targetEnemy.transform.position - transform.position).magnitude)
+        if (attackRange < (targetEnemy.transform.position - transform.position).magnitude)
         {
             timer -= Time.deltaTime;
             if (timer <= 0f)
@@ -147,8 +150,12 @@ public class Player : MonoBehaviour
             if (Random.Range(0, 100) < crit)
                 c = 2f;
 
-            targetEnemy.TakeDamage((baseDamage + damageIncrease) * c);
+            int dmgDealt = targetEnemy.TakeDamage((baseDamage + damageIncrease) * c);
+            Heal((int)(dmgDealt * vamp));
             onHit?.Invoke(targetEnemy, this);
+
+            if (targetEnemy.dead)
+                targetEnemy = null;
         }
     }
 
@@ -189,16 +196,20 @@ public class Player : MonoBehaviour
         //Check if dead
     }
 
-    public void TakeDamage(int amount)
+    public int TakeDamage(int amount)
     {
-        //OnDamageTaken
+        amount = (int)(amount * (100f / (100f + amount)));
         ModifyHealth(-amount);
+        //OnDamageTaken
+        return amount;
     }
 
     public void Heal(int amount)
     {
-        //OnHealed
+        if (amount > maxHp - hp)
+            amount = maxHp - hp;
         ModifyHealth(amount);
+        //if amount > 0:OnHealed
     }
 
     void Freeze(float freezeTime)
@@ -288,6 +299,7 @@ public class Player : MonoBehaviour
         critIncrease = 0;
         cdrIncrease = 0;
         attackRangeIncrease = 0;
+        vampIncrease = 0f;
 
         gameManager.GetItemStats(this);
 
@@ -299,6 +311,7 @@ public class Player : MonoBehaviour
         crit = baseCrit + critIncrease;
         cdr = baseCdr + cdrIncrease;
         attackRange = baseAttackRange + attackRangeIncrease;
+        vamp = baseVamp + vampIncrease;
 
         agent.speed = movementSpeed;
 
@@ -308,7 +321,7 @@ public class Player : MonoBehaviour
         hud.UpdateHealthBar(maxHp, hp);
     }
 
-    public void AddStats(int hpInc, float asMult, float msMult, int damageInc, int defenceInc, int critInc, int cdrInc, float arInc)
+    public void AddStats(int hpInc, float asMult, float msMult, int damageInc, int defenceInc, int critInc, int cdrInc, float arInc, float vampInc)
     {
         maxHp += hpInc;
         asMultiplier += asMult;
@@ -318,6 +331,7 @@ public class Player : MonoBehaviour
         critIncrease += critInc;
         cdrIncrease += cdrInc;
         attackRangeIncrease += arInc;
+        vampIncrease += vampInc;
     }
 }
 

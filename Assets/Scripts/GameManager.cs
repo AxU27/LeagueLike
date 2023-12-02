@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
         {
             i = this;
         }
+
+        AddTokens(10);
     }
 
     public bool AddItem(GameObject itemPrefab)
@@ -36,6 +38,7 @@ public class GameManager : MonoBehaviour
         GameObject go = Instantiate(itemPrefab, transform);
         items.Add(go.GetComponent<Item>());
         player.UpdateStats();
+        Hud.i.UpdateInventory(items);
 
         return true;
     }

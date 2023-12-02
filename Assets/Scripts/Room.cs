@@ -77,6 +77,5 @@ public enum RoomType
     Normal,
     Spawn,
     Boss,
-    Shop,
     Workshop
 }
