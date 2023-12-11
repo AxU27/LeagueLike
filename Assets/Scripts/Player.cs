@@ -1,5 +1,6 @@
 using HighlightPlus;
-using Unity.VisualScripting;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,8 +13,6 @@ public class Player : MonoBehaviour
     GameManager gameManager;
 
     State playerState = State.Idle;
-    Vector2 velocity;
-    Vector2 smoothDeltaPos;
     Enemy targetEnemy;
     [HideInInspector]
     public float attackCd;
@@ -30,6 +29,8 @@ public class Player : MonoBehaviour
     int crit;
     int cdr;
     float vamp;
+
+    Dictionary<string, Buff> buffs;
 
     int hpIncrease;
     float asMultiplier = 1f;
@@ -66,6 +67,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        buffs = new Dictionary<string, Buff>();
         GetReferences();
         gameManager.player = this;
         animator.applyRootMotion = false;
@@ -278,6 +280,11 @@ public class Player : MonoBehaviour
         {
             Ability1Used(0.8f);
         }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            AddBuff(GameAssets.i.buffPrefabs[0]);
+        }
     }
 
 
@@ -302,6 +309,11 @@ public class Player : MonoBehaviour
         vampIncrease = 0f;
 
         gameManager.GetItemStats(this);
+
+        foreach (var buffPair in buffs)
+        {
+            buffPair.Value.AddStats(this);
+        }
 
         maxHp = baseMaxHp + hpIncrease;
         attackSpeed = baseAttackSpeed * asMultiplier;
@@ -332,6 +344,35 @@ public class Player : MonoBehaviour
         cdrIncrease += cdrInc;
         attackRangeIncrease += arInc;
         vampIncrease += vampInc;
+    }
+
+    public void AddBuff(GameObject buffPrefab)
+    {
+        GameObject go = Instantiate(buffPrefab);
+        Buff buff = buffPrefab.GetComponent<Buff>();
+
+        if (buffs.ContainsKey(buff.buffName))
+        {
+            buffs.TryGetValue(buff.buffName, out buff);
+            buff.AddStack();
+            Destroy(go);
+            UpdateStats();
+            return;
+        }
+
+        buffs.Add(buff.buffName, buff);
+
+        UpdateStats();
+    }
+
+    public void RemoveBuff(string buffName)
+    {
+        if (buffs.ContainsKey(buffName))
+        {
+            buffs.Remove(buffName);
+        }
+
+        UpdateStats();
     }
 }
 

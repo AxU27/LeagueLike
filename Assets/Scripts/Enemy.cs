@@ -19,8 +19,6 @@ public class Enemy : MonoBehaviour
     public float attackSpeed = 0.5f;
     public int defence = 0;
 
-    Vector2 velocity;
-    Vector2 smoothDeltaPos;
     [HideInInspector]
     public Player player;
     [HideInInspector]
@@ -39,16 +37,16 @@ public class Enemy : MonoBehaviour
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
         hp = maxHp;
 
-        animator.applyRootMotion = true;
+        animator.applyRootMotion = false;
 
-        agent.updatePosition = false;
+        agent.updatePosition = true;
         agent.updateRotation = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        SyncAnimatorAndAgent();
+        animator.SetFloat("locomotion", agent.velocity.magnitude / agent.speed);
 
         Behavior();
 
@@ -121,37 +119,6 @@ public class Enemy : MonoBehaviour
         if (player != null)
         {
             player.TakeDamage(damage);
-        }
-    }
-
-    void SyncAnimatorAndAgent()
-    {
-        Vector3 worldDeltaPos = agent.nextPosition - transform.position;
-        worldDeltaPos.y = 0f;
-
-        float dx = Vector3.Dot(transform.right, worldDeltaPos);
-        float dy = Vector3.Dot(transform.forward, worldDeltaPos);
-        Vector2 deltaPos = new Vector2(dx, dy);
-
-        float smooth = Mathf.Min(1, Time.deltaTime / 0.1f);
-        smoothDeltaPos = Vector2.Lerp(smoothDeltaPos, deltaPos, smooth);
-
-        velocity = smoothDeltaPos / Time.deltaTime;
-        if (agent.remainingDistance <= agent.stoppingDistance)
-        {
-            velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
-        }
-
-        bool shouldMove = velocity.magnitude > 0.5f && agent.remainingDistance > agent.stoppingDistance;
-
-        animator.SetBool("move", shouldMove);
-        animator.SetFloat("locomotion", velocity.magnitude);
-
-        float deltaMagnitude = worldDeltaPos.magnitude;
-        if (deltaMagnitude > agent.radius / 4)
-        {
-            transform.position = Vector3.Lerp(animator.rootPosition, agent.nextPosition, smooth);
-            modelTransform.position = transform.position;
         }
     }
 }

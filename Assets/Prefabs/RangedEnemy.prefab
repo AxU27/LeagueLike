@@ -527,7 +527,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3
-  m_Acceleration: 5000
+  m_Acceleration: 10
   avoidancePriority: 50
   m_AngularSpeed: 36000
   m_StoppingDistance: 0.2
@@ -791,9 +791,11 @@ MonoBehaviour:
   attackRange: 7
   damage: 10
   attackSpeed: 0.5
+  defence: 0
   player: {fileID: 0}
   hp: 0
   attackCd: 0
+  dead: 0
   projectile: {fileID: 1603392920371116, guid: 87c53553bfdb9a64db70d0405845945c, type: 3}
 --- !u!1 &981437213133973623
 GameObject:

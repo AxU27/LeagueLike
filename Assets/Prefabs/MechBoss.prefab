@@ -741,7 +741,7 @@ Animator:
   m_GameObject: {fileID: 1740899987336659826}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: a50cd06a0668d1a418d586a2944e3ed5, type: 3}
-  m_Controller: {fileID: 9100000, guid: 90f44bf03e1822d458c3397942a6663a, type: 2}
+  m_Controller: {fileID: 9100000, guid: fdd9c984b37bd5d4eb9f146df0c5c0fc, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -2656,10 +2656,14 @@ MonoBehaviour:
   attackRange: 2.5
   damage: 40
   attackSpeed: 0.5
+  defence: 20
   player: {fileID: 0}
   hp: 0
   attackCd: 0
   dead: 0
+  meteorStrikePrefab: {fileID: 8654354648634757009, guid: 0c4c740818101594495f34d3719dfd0b,
+    type: 3}
+  meteorCd: 2
 --- !u!195 &7296601340770063693
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2670,8 +2674,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.75
-  m_Speed: 4
-  m_Acceleration: 5000
+  m_Speed: 2.5
+  m_Acceleration: 10
   avoidancePriority: 50
   m_AngularSpeed: 36000
   m_StoppingDistance: 0.2

@@ -8,6 +8,7 @@ public class GameAssets : MonoBehaviour
     public GameObject[] t2ItemPrefabs;
     public GameObject[] t3ItemPrefabs;
     public GameObject[] enemyPrefabs;
+    public GameObject[] buffPrefabs;
 
     public static GameAssets i;
 
