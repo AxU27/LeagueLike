@@ -348,7 +348,7 @@ public class Player : MonoBehaviour
 
     public void AddBuff(GameObject buffPrefab)
     {
-        GameObject go = Instantiate(buffPrefab);
+        GameObject go = Instantiate(buffPrefab, hud.buffPanel);
         Buff buff = buffPrefab.GetComponent<Buff>();
 
         if (buffs.ContainsKey(buff.buffName))

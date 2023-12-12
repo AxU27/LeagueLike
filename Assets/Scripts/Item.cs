@@ -33,23 +33,23 @@ public class Item : MonoBehaviour
     {
         string statsString = "";
         if (maxHpIncrease != 0)
-            statsString += $"HP: {maxHpIncrease}\n";
+            statsString += $"+{maxHpIncrease} Health\n";
         if (damageIncrease != 0)
-            statsString += $"DMG: {damageIncrease}\n";
+            statsString += $"+{damageIncrease} Damage\n";
         if (asMultiplier != 0)
-            statsString += $"AS: {(int)(asMultiplier * 100)}%\n";
+            statsString += $"+{(int)(asMultiplier * 100)}% Attack Speed\n";
         if (defenceIncrease != 0)
-            statsString += $"DEF: {defenceIncrease}\n";
+            statsString += $"+{defenceIncrease} Defence\n";
         if (vampIncrease != 0)
-            statsString += $"VAMP: {(int)(vampIncrease * 100)}%\n";
+            statsString += $"+{(int)(vampIncrease * 100)}% Life Steal\n";
         if (critIncrease != 0)
-            statsString += $"CRIT: {critIncrease}%\n";
+            statsString += $"+{critIncrease}% Critical Strike Chance\n";
         if (cdrIncrease != 0)
-            statsString += $"CDR: {cdrIncrease}%\n";
+            statsString += $"+{cdrIncrease}% Cooldown Reduction\n";
         if (msMultiplier != 0)
-            statsString += $"MS: {(int)(msMultiplier * 100)}%\n";
+            statsString += $"+{(int)(msMultiplier * 100)}% Movement Speed\n";
         if (attackRangeIncrease != 0)
-            statsString += $"AR: {attackRangeIncrease}\n";
+            statsString += $"+{attackRangeIncrease} Attack Range\n";
 
         return statsString;
     }

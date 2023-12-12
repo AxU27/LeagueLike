@@ -8,6 +8,8 @@ public class Hud : MonoBehaviour
 {
     public static Hud i;
 
+    public Transform buffPanel;
+
     [Header("Health")]
     [SerializeField] Slider hpSlider;
     [SerializeField] TextMeshProUGUI hpText;
