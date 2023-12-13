@@ -1,15 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Buff : MonoBehaviour
 {
+    [SerializeField] TextMeshProUGUI stackText;
+    [SerializeField] Image timeImage;
+
+    [Header("Buff Config")]
     public string buffName;
     public Sprite buffIcon;
     public string buffDescription;
     public float buffDuration;
     public int maxBuffStacks;
+    public float fallOffTime;
 
+    [Header("Stats")]
     public int maxHpIncrease;
     public float asMultiplier;
     public float msMultiplier;
@@ -45,9 +53,12 @@ public class Buff : MonoBehaviour
                 EndBuff();
 
             stacks--;
-            lifeTime = buffDuration;
+            lifeTime = fallOffTime;
             GameManager.i.player.UpdateStats();
         }
+
+        stackText.text = stacks.ToString();
+        timeImage.fillAmount = lifeTime / buffDuration;
     }
 
     public virtual void EndBuff()
@@ -58,6 +69,7 @@ public class Buff : MonoBehaviour
 
     public void AddStack()
     {
+        lifeTime = buffDuration;
         if (stacks < maxBuffStacks)
             stacks++;
     }

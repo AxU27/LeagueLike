@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c50161451dadbf24c885f4ce3b9a901d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: HolyTrinity
+  itemName: Trifecta
   itemIcon: {fileID: 21300000, guid: 9828d8f39b24a7c4682524e2eddea205, type: 3}
   itemDescription: You are all-powerful
   maxHpIncrease: 6969

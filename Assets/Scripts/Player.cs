@@ -17,6 +17,9 @@ public class Player : MonoBehaviour
     [HideInInspector]
     public float attackCd;
     float ability1CdRemaining;
+    float ability2CdRemaining;
+    float ability3CdRemaining;
+    float ability4CdRemaining;
     float timer;
     bool canAct = true;
     int hp;
@@ -97,6 +100,15 @@ public class Player : MonoBehaviour
 
         if (ability1CdRemaining > 0f)
             ability1CdRemaining -= Time.deltaTime;
+
+        if (ability2CdRemaining > 0f)
+            ability2CdRemaining -= Time.deltaTime;
+
+        if (ability3CdRemaining > 0f)
+            ability3CdRemaining -= Time.deltaTime;
+
+        if (ability4CdRemaining > 0f)
+            ability4CdRemaining -= Time.deltaTime;
 
 
         if (targetEnemy != null)
@@ -181,6 +193,16 @@ public class Player : MonoBehaviour
         {
             transform.forward = hit.point - transform.position;
         }
+    }
+
+    void Ability2Used()
+    {
+        if (ability2CdRemaining > 0f)
+            return;
+
+        hud.SetCooldown(2, ability2Cd);
+        ability2CdRemaining = ability2Cd;
+        AddBuff(GameAssets.i.buffPrefabs[0]);
     }
 
     public void Ability1()
@@ -281,9 +303,9 @@ public class Player : MonoBehaviour
             Ability1Used(0.8f);
         }
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            AddBuff(GameAssets.i.buffPrefabs[0]);
+            Ability2Used();
         }
     }
 
@@ -349,11 +371,12 @@ public class Player : MonoBehaviour
     public void AddBuff(GameObject buffPrefab)
     {
         GameObject go = Instantiate(buffPrefab, hud.buffPanel);
-        Buff buff = buffPrefab.GetComponent<Buff>();
+        Buff buff = go.GetComponent<Buff>();
 
         if (buffs.ContainsKey(buff.buffName))
         {
             buffs.TryGetValue(buff.buffName, out buff);
+            Debug.Log(buff.buffName);
             buff.AddStack();
             Destroy(go);
             UpdateStats();
