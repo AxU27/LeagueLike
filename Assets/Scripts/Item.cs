@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Item : MonoBehaviour
 {
+    public ItemType itemType;
     public string itemName;
     public Sprite itemIcon;
     public string itemDescription;
@@ -18,6 +19,8 @@ public class Item : MonoBehaviour
     public int cdrIncrease;
     public float attackRangeIncrease;
     public float vampIncrease;
+
+    public ItemType[] itemsNeededToCraft;
 
     public virtual void AddStats(Player player)
     {
@@ -63,4 +66,12 @@ public class Item : MonoBehaviour
     {
         Player.onHit -= OnHit;
     }
+}
+
+public enum ItemType
+{
+    PlasmaDagger,
+    PlasmaKatana,
+    ExecutionersCalling,
+    Trifecta
 }

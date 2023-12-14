@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b97c256094b17654dadb7d2eab237252, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemType: 2
   itemName: Executioners Calling
   itemIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   itemDescription: 'On hit: Hit enemies below 15% max health explode dealing 15%
@@ -56,4 +57,6 @@ MonoBehaviour:
   critIncrease: 0
   cdrIncrease: 10
   attackRangeIncrease: 0
+  vampIncrease: 0
+  itemsNeededToCraft: 
   effect: {fileID: 656651710569726630, guid: eaea4463a3644a50954d62d01e05c26c, type: 3}

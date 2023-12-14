@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0041cdcfae1a3624ebc7e50493126968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemType: 1
   itemName: Plasma Katana
   itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   itemDescription: 'On hit: deal additional 10 damage'
@@ -56,3 +57,4 @@ MonoBehaviour:
   cdrIncrease: 0
   attackRangeIncrease: 0
   vampIncrease: 0.2
+  itemsNeededToCraft: 
