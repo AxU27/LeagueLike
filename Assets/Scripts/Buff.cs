@@ -31,6 +31,7 @@ public class Buff : MonoBehaviour
     [HideInInspector] public bool ending;
     float lifeTime;
     int stacks = 1;
+    bool hovered;
 
     public virtual void AddStats(Player player)
     {
@@ -63,6 +64,8 @@ public class Buff : MonoBehaviour
 
     public virtual void EndBuff()
     {
+        if (hovered)
+            HideToolTip();
         GameManager.i.player.RemoveBuff(buffName);
         Destroy(gameObject);
     }
@@ -72,5 +75,17 @@ public class Buff : MonoBehaviour
         lifeTime = buffDuration;
         if (stacks < maxBuffStacks)
             stacks++;
+    }
+
+    public void ShowToolTip()
+    {
+        ToolTip.ShowGeneralToolTip(buffDescription);
+        hovered = true;
+    }
+
+    public void HideToolTip()
+    {
+        ToolTip.HideGeneralToolTip();
+        hovered = false;
     }
 }

@@ -141,4 +141,46 @@ public class Hud : MonoBehaviour
     {
         tokenText.text = tokens.ToString();
     }
+
+    public void ShowStatToolTip(int i)
+    {
+        string t = "";
+
+        switch (i)
+        {
+            case 0:
+                t = "Attack Damage " + damageText.text;
+                break;
+
+            case 1:
+                t = "Critical Strike Chance " + critText.text;
+                break;
+
+            case 2:
+                t = "Defence " + defenceText.text;
+                break;
+
+            case 3:
+                t = "Attack Speed " + attackspeedText.text;
+                break;
+
+            case 4:
+                t = "Cooldown Reduction " + cdrText.text;
+                break;
+
+            case 5:
+                t = "Movement Speed " + movespeedText.text;
+                break;
+
+            default:
+                break;
+        }
+
+        ToolTip.ShowGeneralToolTip(t);
+    }
+
+    public void HideStatToolTip()
+    {
+        ToolTip.HideGeneralToolTip();
+    }
 }

@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
             i = this;
         }
 
-        AddTokens(10);
+        AddTokens(100);
     }
 
     public bool AddItem(GameObject itemPrefab)
@@ -41,6 +41,30 @@ public class GameManager : MonoBehaviour
         Hud.i.UpdateInventory(items);
 
         return true;
+    }
+
+    public void RemoveItem(ItemType type)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].GetComponent<Item>().itemType == type)
+            {
+                Item item = items[i];
+                items.RemoveAt(i);
+                Destroy(item.gameObject);
+                break;
+            }
+        }
+    }
+
+    public Item[] GetCurrentItems()
+    {
+        Item[] itms = new Item[items.Count];
+        for (int i = 0;i < items.Count;i++)
+        {
+            itms[i] = items[i];
+        }
+        return itms;
     }
 
     public void GetItemStats(Player player)

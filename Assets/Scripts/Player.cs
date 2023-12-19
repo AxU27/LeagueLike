@@ -307,6 +307,11 @@ public class Player : MonoBehaviour
         {
             Ability2Used();
         }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            CraftingUi.i.ToggleCrafting();
+        }
     }
 
 

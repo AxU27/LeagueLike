@@ -48,13 +48,13 @@ MonoBehaviour:
   itemName: Trifecta
   itemIcon: {fileID: 21300000, guid: 9828d8f39b24a7c4682524e2eddea205, type: 3}
   itemDescription: You are all-powerful
-  maxHpIncrease: 6969
-  asMultiplier: 4.2
-  msMultiplier: 1
-  damageIncrease: 420
-  defenceIncrease: 420
-  critIncrease: 69
-  cdrIncrease: 69
+  maxHpIncrease: 500
+  asMultiplier: 0.5
+  msMultiplier: 0.3
+  damageIncrease: 100
+  defenceIncrease: 100
+  critIncrease: 50
+  cdrIncrease: 50
   attackRangeIncrease: 2
-  vampIncrease: 0.69
+  vampIncrease: 0.2
   itemsNeededToCraft: 0100000000000000
