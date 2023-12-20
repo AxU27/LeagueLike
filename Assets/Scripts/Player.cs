@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     Enemy targetEnemy;
     [HideInInspector]
     public float attackCd;
+    float passiveCdRemaining;
     float ability1CdRemaining;
     float ability2CdRemaining;
     float ability3CdRemaining;
@@ -62,6 +63,7 @@ public class Player : MonoBehaviour
     public int baseCrit = 0;
     public int baseCdr = 0;
     public float baseVamp = 0f;
+    [SerializeField] float passiveCd;
     [SerializeField] float ability1Cd, ability2Cd, ability3Cd, ability4Cd;
 
     public delegate void OnHit(Enemy enemy, Player player);
@@ -94,6 +96,9 @@ public class Player : MonoBehaviour
         {
             transform.forward = Vector3.Lerp(transform.forward, agent.desiredVelocity, 7 * Time.deltaTime);
         }
+
+        if (passiveCdRemaining > 0f)
+            passiveCdRemaining -= Time.deltaTime;
 
         if (attackCd > 0f)
             attackCd -= Time.deltaTime;
@@ -164,9 +169,17 @@ public class Player : MonoBehaviour
             if (Random.Range(0, 100) < crit)
                 c = 2f;
 
-            int dmgDealt = targetEnemy.TakeDamage((baseDamage + damageIncrease) * c);
+            int dmgDealt = targetEnemy.TakeDamage(damage * c);
             Heal((int)(dmgDealt * vamp));
             onHit?.Invoke(targetEnemy, this);
+
+            if (passiveCdRemaining <= 0f)
+            {
+                targetEnemy.TakeDamage(targetEnemy.hp * 0.1f);
+                Heal((int)((float)(maxHp - hp) * 0.2f));
+                passiveCdRemaining = GetCooldown(passiveCd);
+                hud.SetCooldown(0, passiveCdRemaining);
+            }
 
             if (targetEnemy.dead)
                 targetEnemy = null;
@@ -182,8 +195,8 @@ public class Player : MonoBehaviour
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         animator.applyRootMotion = true;
         animator.SetTrigger("ability1");
-        hud.SetCooldown(1, ability1Cd);
-        ability1CdRemaining = ability1Cd;
+        ability1CdRemaining = GetCooldown(ability1Cd);
+        hud.SetCooldown(1, ability1CdRemaining);
         Freeze(freezeTime);
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = 50f;
@@ -200,8 +213,8 @@ public class Player : MonoBehaviour
         if (ability2CdRemaining > 0f)
             return;
 
-        hud.SetCooldown(2, ability2Cd);
-        ability2CdRemaining = ability2Cd;
+        ability2CdRemaining = GetCooldown(ability2Cd);
+        hud.SetCooldown(2, ability2CdRemaining);
         AddBuff(GameAssets.i.buffPrefabs[0]);
     }
 
@@ -209,6 +222,11 @@ public class Player : MonoBehaviour
     {
         GameObject go = Instantiate(abilityProjectile, modelTransform.position + Vector3.up, modelTransform.rotation);
         go.GetComponent<Projectile>().Setup(damage * 2, 5, 40f, 10f, null, null);
+    }
+
+    float GetCooldown(float cd)
+    {
+        return cd * (1f - ((float)cdr / 100f));
     }
 
     void ModifyHealth(int amount)
@@ -300,7 +318,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Ability1Used(0.8f);
+            Ability1Used(0.8f * (1f/msMultiplier));
         }
 
         if (Input.GetKeyDown(KeyCode.W))
@@ -348,7 +366,7 @@ public class Player : MonoBehaviour
         damage = baseDamage + damageIncrease;
         defence = baseDefence + defenseIncrease;
         crit = baseCrit + critIncrease;
-        cdr = baseCdr + cdrIncrease;
+        cdr = Mathf.RoundToInt(Mathf.Clamp(baseCdr + cdrIncrease, 0f, 75f));
         attackRange = baseAttackRange + attackRangeIncrease;
         vamp = baseVamp + vampIncrease;
 

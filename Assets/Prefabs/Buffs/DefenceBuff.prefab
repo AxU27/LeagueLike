@@ -194,8 +194,8 @@ MonoBehaviour:
   buffName: Defenceee
   buffIcon: {fileID: 0}
   buffDescription: Increases defence by 400
-  buffDuration: 5
-  maxBuffStacks: 3
+  buffDuration: 3
+  maxBuffStacks: 1
   fallOffTime: 0.5
   maxHpIncrease: 0
   asMultiplier: 0
