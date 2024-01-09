@@ -797,6 +797,7 @@ MonoBehaviour:
   attackCd: 0
   dead: 0
   projectile: {fileID: 1603392920371116, guid: 87c53553bfdb9a64db70d0405845945c, type: 3}
+  shotOffset: {x: 0.3, y: 1, z: 0}
 --- !u!1 &981437213133973623
 GameObject:
   m_ObjectHideFlags: 0

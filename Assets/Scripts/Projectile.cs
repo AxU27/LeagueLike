@@ -10,6 +10,7 @@ public class Projectile : MonoBehaviour
     float lifeDistance = 100f;
     Enemy targetEnemy;
     Player targetPlayer;
+    bool healing;
 
     int pierced = 0;
 
@@ -26,7 +27,10 @@ public class Projectile : MonoBehaviour
             lookVector = new Vector3(lookVector.x, 0, lookVector.z);
             if (lookVector.magnitude < 0.1f)
             {
-                targetEnemy.TakeDamage(damage);
+                if (healing)
+                    targetEnemy.Heal(damage);
+                else
+                    targetEnemy.TakeDamage(damage);
                 Destroy(gameObject);
             }
 
@@ -66,7 +70,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void Setup(int damage, int piercing, float speed, float lifeDistance, Enemy enemy, Player player)
+    public void Setup(int damage, int piercing, float speed, float lifeDistance, Enemy enemy, Player player, bool healing)
     {
         this.damage = damage;
         this.piercing = piercing;
@@ -74,5 +78,6 @@ public class Projectile : MonoBehaviour
         this.lifeDistance = lifeDistance;
         targetEnemy = enemy;
         targetPlayer = player;
+        this.healing = healing;
     }
 }

@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] Transform modelTransform;
 
     [Header("Stats")]
-    public float maxHp = 100f;
+    public int maxHp = 100;
     public float attackRange = 2f;
     public int damage = 20;
     public float attackSpeed = 0.5f;
@@ -22,8 +22,8 @@ public class Enemy : MonoBehaviour
     [HideInInspector]
     public Player player;
     [HideInInspector]
-    public float hp;
-    float timer;
+    public int hp;
+    protected float timer;
     [HideInInspector]
     public float attackCd;
     public bool dead;
@@ -37,7 +37,8 @@ public class Enemy : MonoBehaviour
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
         hp = maxHp;
 
-        animator.applyRootMotion = false;
+        if (animator != null)
+            animator.applyRootMotion = false;
 
         agent.updatePosition = true;
         agent.updateRotation = true;
@@ -46,7 +47,8 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        animator.SetFloat("locomotion", agent.velocity.magnitude / agent.speed);
+        if (animator != null)
+            animator.SetFloat("locomotion", agent.velocity.magnitude / agent.speed);
 
         Behavior();
 
@@ -54,7 +56,7 @@ public class Enemy : MonoBehaviour
             attackCd -= Time.deltaTime;
     }
 
-    public virtual void Behavior()
+    protected virtual void Behavior()
     {
         if (player != null && !dead)
         {
@@ -62,7 +64,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public int TakeDamage(float amount)
+    public int TakeDamage(int amount)
     {
         amount = (int)(amount * (100f / (100f + defence)));
         hp -= amount;
@@ -75,17 +77,28 @@ public class Enemy : MonoBehaviour
             Die();
         }
 
-        return (int)amount;
+        return amount;
     }
 
-    public virtual void Die()
+    public int Heal(int amount)
+    {
+        if (hp + amount > maxHp)
+            amount = maxHp - hp;
+
+        hp += amount;
+        UpdateHealthBar();
+
+        return amount;
+    }
+
+    protected virtual void Die()
     {
         Destroy(gameObject);
     }
 
     void UpdateHealthBar()
     {
-        hpSlider.value = hp / maxHp;
+        hpSlider.value = (float)hp / (float)maxHp;
     }
 
     void FollowAndAttack()
@@ -105,7 +118,11 @@ public class Enemy : MonoBehaviour
 
             if (attackCd <= 0f)
             {
-                animator.SetTrigger("attack");
+                if (animator != null)
+                    animator.SetTrigger("attack");
+                else
+                    Attack();
+
                 attackCd = 1f / attackSpeed;
             }
 

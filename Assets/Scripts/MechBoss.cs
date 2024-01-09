@@ -10,7 +10,9 @@ public class MechBoss : Enemy
     float timer1;
     float timer2 = 0.8f;
 
-    public override void Behavior()
+    bool healersSpawned;
+
+    protected override void Behavior()
     {
         if (dead || player == null)
             return;
@@ -28,6 +30,7 @@ public class MechBoss : Enemy
                 go.GetComponent<Explosion>().Init(damage * 2);
                 timer2 = meteorCd;
             }
+            
         }
         else
         {
@@ -35,9 +38,22 @@ public class MechBoss : Enemy
             base.Behavior();
         }
 
+        if (!healersSpawned)
+        {
+            if (hp <= maxHp / 2)
+            {
+                healersSpawned = true;
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector3 point = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f));
+                    GameObject go = Instantiate(GameAssets.i.enemyPrefabs[2], transform.position + point, Quaternion.identity);
+                    go.GetComponent<HealerRobot>().SetHealingTarget(this);
+                }
+            }
+        }
     }
 
-    public override void Die()
+    protected override void Die()
     {
         animator.SetTrigger("die");
         //Spawn particles

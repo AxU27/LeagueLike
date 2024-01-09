@@ -16,7 +16,7 @@ public class ExecutionersCalling : Item
             {
                 if (col.tag == "Enemy")
                 {
-                    col.GetComponent<Enemy>().TakeDamage(e.maxHp * 0.15f);
+                    col.GetComponent<Enemy>().TakeDamage((int)(e.maxHp * 0.15f));
                 }
             }
 

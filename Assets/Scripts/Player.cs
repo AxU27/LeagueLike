@@ -169,13 +169,13 @@ public class Player : MonoBehaviour
             if (Random.Range(0, 100) < crit)
                 c = 2f;
 
-            int dmgDealt = targetEnemy.TakeDamage(damage * c);
+            int dmgDealt = targetEnemy.TakeDamage((int)(damage * c));
             Heal((int)(dmgDealt * vamp));
             onHit?.Invoke(targetEnemy, this);
 
             if (passiveCdRemaining <= 0f)
             {
-                targetEnemy.TakeDamage(targetEnemy.hp * 0.1f);
+                targetEnemy.TakeDamage((int)(targetEnemy.hp * 0.1f));
                 Heal((int)((float)(maxHp - hp) * 0.2f));
                 passiveCdRemaining = GetCooldown(passiveCd);
                 hud.SetCooldown(0, passiveCdRemaining);
@@ -221,7 +221,7 @@ public class Player : MonoBehaviour
     public void Ability1()
     {
         GameObject go = Instantiate(abilityProjectile, modelTransform.position + Vector3.up, modelTransform.rotation);
-        go.GetComponent<Projectile>().Setup(damage * 2, 5, 40f, 10f, null, null);
+        go.GetComponent<Projectile>().Setup(damage * 2, 5, 40f, 10f, null, null, false);
     }
 
     float GetCooldown(float cd)
@@ -238,9 +238,14 @@ public class Player : MonoBehaviour
         //Check if dead
     }
 
+    /// <summary>
+    /// Calculates damage taken from pure damage and defence and applies it to the Player.
+    /// </summary>
+    /// <param name="amount">Amount of pure damage</param>
+    /// <returns>The amount of damage dealt after the defence calculation</returns>
     public int TakeDamage(int amount)
     {
-        amount = (int)(amount * (100f / (100f + defence)));
+        amount = (int)Mathf.Clamp((amount * (100f / (100f + defence))), 1f, 99999f);
         ModifyHealth(-amount);
         //OnDamageTaken
         return amount;
